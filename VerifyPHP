@@ -1,0 +1,13 @@
+<?php
+include "db_connect.php";
+
+$type = $_GET['type'];
+$id = $_GET['id'];
+
+if($type == "lost"){
+    mysqli_query($conn, "UPDATE lost_items SET status='Verified' WHERE id=$id");
+}else{
+    mysqli_query($conn, "UPDATE found_items SET status='Verified' WHERE id=$id");
+}
+
+header("Location: ADMIN.php");
