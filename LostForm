@@ -1,0 +1,184 @@
+<?php
+include 'db_connect.php';
+
+$sql = "SELECT * FROM lost_items ORDER BY id DESC";
+$result = mysqli_query($conn, $sql);
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>LOSTT</title>
+	<style>
+  body {
+    background-image: url(image/bg.jpg);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+ }
+
+  .text-section {
+  font-family: Cambria;
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+    .text-section2 {
+    font-family: "sans-serif";
+    color: #000;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+    .Heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+  #reportList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 30px;
+}
+
+    .box {
+    background-color: #f8f8c3;
+    width: 250px;
+    padding: 25px;
+    border: 2px solid black;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+    .box:hover {
+    transform: scale(1.03);
+}
+
+    .box img {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+  .box h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .contact-btn {
+  background-color: #FFF8F8;
+  color: #000000;
+  display: inline-block;
+  padding: 12px 20px;
+  font-size: 18px;
+  border-radius: 30px;
+  border: 1px solid black;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.contact-btn:hover {
+  background-color: #ffe0b3;
+  transform: scale(1.05);
+}
+
+  hr {
+    width: 100%;
+    height: 3px;
+    background-color: black;
+    border: none;
+  }
+</style>
+
+</head>
+
+<body>
+<table width="1350" border="0" cellspacing="1" cellpadding="1">
+  <tbody>
+    <tr>
+      <td width="250" align="center"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
+      <td width="261">&nbsp;</td>
+      <td width="113" align="center"></td>
+      <td width="101" align="center"><a href="http://localhost/I-found/LOSTT.php"  class="text-section">Lost&#9662</a></td>
+      <td width="130" align="center"><a href="http://localhost/I-found/LOST_REPORT.php" class="text-section">Report Lost&#9662</a></td>
+      <td width="116" align="center"><a href="http://localhost/I-found/FOUNDD.php"  class="text-section">Found&#9662</a></td>
+      <td width="148" align="center"><a href="http://localhost/I-found/FOUND_REPORT.php"  class="text-section">Report Found&#9662</a></td>
+      <td width="84" align="center"><a href="http://localhost/I-found/PROFILEE.php" class="text-section">Profile&#9662</a></td>
+	  <td width="119" align="center">
+		<a href="http://localhost/I-found/LOGINN.php" 
+		   style="background-color: #FFF8F8;
+				  color: #000000;
+				  display: inline-block;
+				  padding: 12px 20px;
+				  font-size: 18px;
+				  border-radius: 30px;
+				  text-decoration: none;">Log Out</a>
+	  </td>
+    </tr>
+  </tbody>
+</table>
+	
+<main>
+    <br><br><br>
+    <div class="Heading" align="center"><strong>LOST ITEM</strong></div>
+    <br><br>
+
+    <div id="reportList" style="display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <?php while($row = mysqli_fetch_assoc($result)) { ?>
+        <div class="box">
+            <h3><?php echo $row['item']; ?></h3>
+
+            <?php if(!empty($row['photo'])) { ?>
+                <img src="uploads/<?php echo $row['photo']; ?>" width="200" height="150" style="border-radius:10px;">
+            <?php } ?>
+
+            <p><b>Reported by:</b> <?php echo $row['reported_by']; ?></p>
+            <p><b>Location:</b> <?php echo $row['location']; ?></p>
+            <p><b>Date:</b> <?php echo $row['date']; ?></p>
+            <p><b>Description:</b> <?php echo $row['description']; ?></p>
+
+            <a href="https://wa.me/601158939306" target="_blank" class="contact-btn">Contact</a>
+        </div>
+        <?php } ?>
+    </div>
+</main>
+<br><br><br><br><br>
+	<hr style="width: 100%; height: 3px; background-color: black; border: none;">
+<footer>
+	<table width="1350" border="0" cellspacing="1" cellpadding="1">
+  <tbody>
+    <tr>
+      <td width="360" height="81"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
+      <td width="152" align="center"><em><strong><u>SITE</u></strong></em><br>Lost<br>Report Lost<br>Found<br>Report Found</td>
+      <td width="590" align="center"><font size="+1">&copy;2025 UPTM LOST AND FOUND SYSTEM</font></td>
+      
+      <td width="235" align="left"><font size="+1"><em><strong><u>Contact</u></strong></em></font><br>Tel: 011-58939306<br>Email: lostfound@uptm.edu.my<br>
+        <img src="image/fb.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Facebook"/>
+  		<img src="image/ig.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Instagram"/>
+  		<img src="image/aboutUs.png" width="50" height="40" style="vertical-align:middle;" alt="About Us"/></td>
+    </tr>
+  </tbody>
+</table>
+
+	</footer>
+
+</body>
+</html>
