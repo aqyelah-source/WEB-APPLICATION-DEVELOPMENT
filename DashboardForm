@@ -1,0 +1,168 @@
+<?php
+include "db_connect.php";
+session_start();
+
+if(!isset($_SESSION['username']) || $_SESSION['username'] != "admin"){
+    header("Location: LOGINN.php");
+    exit;
+}
+
+// HITS KIRAAN
+$totalLost = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(*) as c FROM lost_items"))['c'];
+$totalFound = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(*) as c FROM found_items"))['c'];
+$verified = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(*) as c FROM lost_items WHERE status='Verified'"))['c'] 
+          + mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(*) as c FROM found_items WHERE status='Verified'"))['c'];
+
+$pending = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(*) as c FROM lost_items WHERE status='Pending'"))['c'] 
+         + mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(*) as c FROM found_items WHERE status='Pending'"))['c'];
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ADMIN DASHBOARD</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+    background-image: url(image/bg.jpg);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+
+.text-section{
+  font-family: Cambria;
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  text-decoration: none;
+}
+  .Heading {
+    font-size: 40px;
+    font-weight: 800;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  /* Ringkasan box */
+  .summary-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 40px;
+  }
+
+  .summary-box {
+    background-color: #f8f8c3;
+    border: 2px solid black;
+    border-radius: 30px;
+    padding: 25px 50px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  /* Chart container */
+  .chart-container {
+    width: 700px;
+    margin: 60px auto;
+    background-color: #fffbe6;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  hr {
+    width: 100%;
+    height: 3px;
+    background-color: black;
+    border: none;
+  }
+</style>
+</head>
+
+<body>
+	<table width="1350" border="0" cellspacing="1" cellpadding="1">
+  <tbody>
+    <tr>
+      <td width="250" align="center"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
+      <td width="261">&nbsp;</td>
+      <td width="113" align="center"></td>
+      <td width="115" align="center"></td>
+      <td width="116" align="center"></td>
+      <td width="116" align="center"><a href="http://localhost/I-found/ADMIN.php" class="text-section">Record&#9662</a></td>
+      <td width="129" align="center"><a href="http://localhost/I-found/ADMIN_DASHBOARD.php" class="text-section">Dashboard&#9662</a></td>
+      <td width="30" align="center"></td>
+    <td width="192" align="center">
+    <a href="http://localhost/I-found/LOGINN.php" 
+       style="background-color: #FFF8F8;
+          color: #000000;
+          display: inline-block;
+          padding: 12px 20px;
+          font-size: 18px;
+          border-radius: 30px;
+          text-decoration: none;">Log Out</a>
+    </td>
+    </tr>
+  </tbody>
+</table><br>
+<main>
+  <div class="Heading"><strong>DASHBOARD</strong></div>
+
+  <!-- Ringkasan -->
+  <div class="summary-container">
+    <div class="summary-box">Total Lost: <?php echo $totalLost; ?></div>
+    <div class="summary-box">Total Found: <?php echo $totalFound; ?></div>
+    <div class="summary-box">Verified: <?php echo $verified; ?></div>
+    <div class="summary-box">Pending: <?php echo $pending; ?></div>
+
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-container">
+    <canvas id="lostFoundChart"></canvas>
+  </div>
+</main>
+<br><br><br><br>
+	<hr style="width: 100%; height: 3px; background-color: black; border: none;">
+<footer>
+	<table width="1350" border="0" cellspacing="1" cellpadding="1">
+  <tbody>
+    <tr>
+      <td width="360" height="81"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
+      <td width="152" align="center"><em><strong><u>SITE</u></strong></em><br>Lost<br>Report Lost<br>Found<br>Report Found</td>
+      <td width="590" align="center"><font size="+1">&copy;2025 UPTM LOST AND FOUND SYSTEM</font></td>
+      
+      <td width="235" align="left"><font size="+1"><em><strong><u>Contact</u></strong></em></font><br>Tel: 011-58939306<br>Email: lostfound@uptm.edu.my<br>
+        <img src="image/fb.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Facebook"/>
+  		<img src="image/ig.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Instagram"/>
+  		<img src="image/aboutUs.png" width="50" height="40" style="vertical-align:middle;" alt="About Us"/></td>
+    </tr>
+  </tbody>
+</table>
+
+	</footer>
+<script>
+var ctx = document.getElementById('lostFoundChart').getContext('2d');
+new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: ['Lost', 'Found'],
+    datasets: [{
+      data: [<?php echo $totalLost; ?>, <?php echo $totalFound; ?>]
+    }]
+  }
+});
+</script>
+
+</body>
+</html>
