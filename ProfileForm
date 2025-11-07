@@ -1,0 +1,253 @@
+<?php
+session_start();
+include 'db_connect.php'; // <--- tukar kepada dp_connect.php jika file awak nama tu
+
+// pastikan user dah login dan username disimpan di session
+if (!isset($_SESSION['username'])) {
+    header("Location: LOGINN.php");
+    exit;
+}
+
+$username = $_SESSION['username'];
+
+// handle update POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
+    // ambil nilai dari form (simple sanitization)
+    $name = $_POST['name'] ?? '';
+    $idNum = $_POST['idNum'] ?? '';
+    $course = $_POST['course'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $gender = $_POST['gender'] ?? '';
+    $email = $_POST['email'] ?? '';
+
+    // prepared statement untuk update
+    $stmt = $conn->prepare("UPDATE users SET name=?, idNum=?, course=?, phone=?, gender=?, email=? WHERE username=?");
+    $stmt->bind_param("sssssss", $name, $idNum, $course, $phone, $gender, $email, $username);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Profile updated successfully');</script>";
+    } else {
+        echo "<script>alert('Update failed: ".htmlspecialchars($stmt->error)."');</script>";
+    }
+    $stmt->close();
+}
+
+// ambil data user semasa dari DB
+$stmt = $conn->prepare("SELECT user_id, name, idNum, course, phone, gender, email, username FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+// jika tak jumpa user (aneh), redirect ke login
+if (!$user) {
+    echo "<script>alert('User not found, please login again'); window.location='LOGINN.php';</script>";
+    exit;
+}
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>PROFILEE</title>
+	<style>
+    body {
+			background-image:url(image/bg.jpg);
+			background-attachment: fixed;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: cover;
+		}
+		
+.text-section {
+  font-family: Cambria;
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  text-decoration: none;
+}
+	.text-section2 {
+	font-family:  "sans-serif"
+    color: #000;
+    font-size: 16px;
+	text-decoration: none;
+    }
+
+    .Heading {
+        font-size: 40px;
+        font-weight: 800;
+        color: #000;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+    }
+
+    .box {
+        background-color: #f8f8c3;
+        padding: 30px;
+        border: 2px solid black;
+        border-radius: 30px;
+        text-align: center;
+    }
+
+    input {
+        width: 100%;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        box-sizing: border-box;
+        margin-bottom: 12px;
+    }
+
+    .gender-group {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    label::before {
+        content: "";
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        border: 2px solid #999;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    input[type="radio"]:checked + label::before {
+        background-color: #6a0dad;
+        border-color: #6a0dad;
+        box-shadow: 0 0 4px rgba(106, 13, 173, 0.5);
+    }
+
+    button {
+        background-color: #6a0dad;
+        color: white;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #530b9b;
+    }
+</style>
+</head>
+
+<body>
+	<table width="1350" border="0" cellspacing="1" cellpadding="1">
+  <tbody>
+    <tr>
+      <td width="250" align="center"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
+      <td width="261">&nbsp;</td>
+      <td width="113" align="center"></td>
+      <td width="101" align="center"><a href="http://localhost/I-found/LOSTT.php"  class="text-section">Lost&#9662</a></td>
+      <td width="130" align="center"><a href="http://localhost/I-found/LOST_REPORT.php" class="text-section">Report Lost&#9662</a></td>
+      <td width="116" align="center"><a href="http://localhost/I-found/FOUNDD.php"  class="text-section">Found&#9662</a></td>
+      <td width="148" align="center"><a href="http://localhost/I-found/FOUND_REPORT.php"  class="text-section">Report Found&#9662</a></td>
+      <td width="84" align="center"><a href="http://localhost/I-found/PROFILEE.php" class="text-section">Profile&#9662</a></td>
+    <td width="119" align="center">
+    <a href="http://localhost/I-found/LOGINN.php" 
+       style="background-color: #FFF8F8;
+          color: #000000;
+          display: inline-block;
+          padding: 12px 20px;
+          font-size: 18px;
+          border-radius: 30px;
+          text-decoration: none;">Log Out</a>
+    </td>
+    </tr>
+  </tbody>
+</table>
+<main>
+<br><br><br>
+<div class="Heading"><strong>Profile</strong></div>
+<br><br>
+
+<!-- form update profile -->
+<form method="POST" action="PROFILEE.php">
+<table width="885" border="0" align="center" cellpadding="1" cellspacing="1" class="box">
+  <tr>
+    <td width="324" align="center" class="text-section2">Name:</td>
+    <td width="537"><input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name']); ?>"></td>
+  </tr>
+
+  <tr>
+    <td align="center" class="text-section2">ID Number:</td>
+    <td><input type="text" id="idNum" name="idNum" value="<?php echo htmlspecialchars($user['idNum']); ?>"></td>
+  </tr>
+
+  <tr>
+    <td align="center" class="text-section2">Course:</td>
+    <td><input type="text" id="course" name="course" value="<?php echo htmlspecialchars($user['course']); ?>"></td>
+  </tr>
+
+  <tr>
+    <td align="center" class="text-section2">Contact Number:</td>
+    <td><input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>"></td>
+  </tr>
+
+  <tr>
+    <td align="center" class="text-section2">Gender:</td>
+    <td>
+      <div class="gender-group">
+        <input type="radio" id="female" name="gender" value="Female" <?php echo ($user['gender'] === 'Female') ? 'checked' : ''; ?>>
+        <label for="female">Female</label>
+
+        <input type="radio" id="male" name="gender" value="Male" <?php echo ($user['gender'] === 'Male') ? 'checked' : ''; ?>>
+        <label for="male">Male</label>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" class="text-section2">Email:</td>
+    <td><input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>"></td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td align="center"><button type="submit" name="update">Update</button></td>
+  </tr>
+</table>
+</form>
+</main>
+	<br><br><br><br><br>
+	<hr style="width: 100%; height: 3px; background-color: black; border: none;">
+<footer>
+	<table width="1350" border="0" cellspacing="1" cellpadding="1">
+  <tbody>
+    <tr>
+      <td width="360" height="81"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
+      <td width="152" align="center"><em><strong><u>SITE</u></strong></em><br>Lost<br>Report Lost<br>Found<br>Report Found</td>
+      <td width="590" align="center"><font size="+1">&copy;2025 UPTM LOST AND FOUND SYSTEM</font></td>
+      
+      <td width="235" align="left"><font size="+1"><em><strong><u>Contact</u></strong></em></font><br>Tel: 011-58939306<br>Email: lostfound@uptm.edu.my<br>
+        <img src="image/fb.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Facebook"/>
+  		<img src="image/ig.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Instagram"/>
+  		<img src="image/aboutUs.png" width="50" height="40" style="vertical-align:middle;" alt="About Us"/></td>
+    </tr>
+  </tbody>
+</table>
+
+	</footer>
+</body>
+</html>
