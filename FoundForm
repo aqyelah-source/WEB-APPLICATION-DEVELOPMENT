@@ -161,18 +161,20 @@ hr {
 <!-- FOOTER -->
 <footer>
   <table width="1350" border="0" cellspacing="1" cellpadding="1">
-    <tbody>
-      <tr>
-        <td width="360" height="81"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
-        <td width="152" align="center"><em><strong><u>SITE</u></strong></em><br>Lost<br>Report Lost<br>Found<br>Report Found</td>
-        <td width="590" align="center"><font size="+1">&copy;2025 UPTM LOST AND FOUND SYSTEM</font></td>
-        <td width="235" align="left"><font size="+1"><em><strong><u>Contact</u></strong></em></font><br>Tel: 011-58939306<br>Email: lostfound@uptm.edu.my<br>
-          <img src="image/fb.png" width="50" height="40" alt="Facebook"/>
-          <img src="image/ig.png" width="50" height="40" alt="Instagram"/>
-          <img src="image/aboutUs.png" width="50" height="40" alt="About Us"/></td>
-      </tr>
-    </tbody>
-  </table>
-</footer>
+  <tbody>
+    <tr>
+      <td width="360" height="81"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
+      <td width="152" align="center"><em><strong><u>SITE</u></strong></em><br>Lost<br>Report Lost<br>Found<br>Report Found</td>
+      <td width="590" align="center"><font size="+1">&copy;2025 UPTM LOST AND FOUND SYSTEM</font></td>
+      
+      <td width="235" align="left"><font size="+1"><em><strong><u>Contact</u></strong></em></font><br>Tel: 011-58939306<br>Email: lostfound@uptm.edu.my<br>
+        <a href="https://www.facebook.com/" class="text-section"><img src="image/fb.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Facebook"/></a>
+        <a href="https://www.instagram.com/" class="text-section"><img src="image/ig.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Instagram"/></a>
+      <img src="image/aboutUs.png" width="50" height="40" style="vertical-align:middle;" alt="About Us"/></td>
+    </tr>
+  </tbody>
+</table>
+
+  </footer>
 </body>
 </html>
