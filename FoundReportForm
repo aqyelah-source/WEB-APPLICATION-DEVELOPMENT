@@ -191,7 +191,7 @@ if (isset($_POST['submit'])) {
 	<br><br><br><br><br>
 	<hr style="width: 100%; height: 3px; background-color: black; border: none;">
 <footer>
-	<table width="1350" border="0" cellspacing="1" cellpadding="1">
+  <table width="1350" border="0" cellspacing="1" cellpadding="1">
   <tbody>
     <tr>
       <td width="360" height="81"><img src="image/logoo.png" width="250" height="100" alt=""/></td>
@@ -199,13 +199,13 @@ if (isset($_POST['submit'])) {
       <td width="590" align="center"><font size="+1">&copy;2025 UPTM LOST AND FOUND SYSTEM</font></td>
       
       <td width="235" align="left"><font size="+1"><em><strong><u>Contact</u></strong></em></font><br>Tel: 011-58939306<br>Email: lostfound@uptm.edu.my<br>
-        <img src="image/fb.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Facebook"/>
-  		<img src="image/ig.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Instagram"/>
-  		<img src="image/aboutUs.png" width="50" height="40" style="vertical-align:middle;" alt="About Us"/></td>
+        <a href="https://www.facebook.com/" class="text-section"><img src="image/fb.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Facebook"/></a>
+        <a href="https://www.instagram.com/" class="text-section"><img src="image/ig.png" width="50" height="40" style="vertical-align:middle; margin-right:5px;" alt="Instagram"/></a>
+      <img src="image/aboutUs.png" width="50" height="40" style="vertical-align:middle;" alt="About Us"/></td>
     </tr>
   </tbody>
 </table>
 
-	</footer>
+  </footer>
 </body>
 </html>
